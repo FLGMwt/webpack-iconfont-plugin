@@ -14,7 +14,9 @@ export default class WebfontPlugin {
             throw new Error('Require `dest` options');
         }
 
-        this.options = Object.assign({}, options);
+        this.options = Object.assign({
+            template: './template.scss'
+        }, options);
         console.log(this.options);
         this.fileDependencies = [];
     }
@@ -36,6 +38,7 @@ export default class WebfontPlugin {
 
         return nodify(
             webfont(options).then(result => {
+                console.log(result);
                 const { fontName } = result.config;
                 const dest = path.resolve(this.options.dest.fontsDir);
 
@@ -103,13 +106,10 @@ export default class WebfontPlugin {
     }
 
     watch(compilation, callback) {
-        const globPatterns = typeof this.options.files === 'string'
-            ? [this.options.files]
-            : this.options.files;
+        const globPatterns = typeof this.options.files === 'string' ? [this.options.files] : this.options.files;
 
         globPatterns.forEach(globPattern => {
             const context = globParent(globPattern);
-
             if (compilation.contextDependencies.indexOf(context) === -1) {
                 compilation.contextDependencies.push(context);
             }
