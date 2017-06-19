@@ -1,22 +1,24 @@
 {
-    "name": "webpack-webfont-plugin",
+    "name": "webpack-iconfont-plugin",
     "version": "0.0.1",
-    "description": "Webpack plugin to icon webfont from svgs",
+    "description": "Webpack plugin to icon font from svgs",
     "license": "MIT",
     "author": "Jens Fischer <jens@weareprofound.com>",
     "repository": {
         "type": "https",
-        "url": "https://github.com/artofrawr/webpack-webfont-plugin"
+        "url": "https://github.com/artofrawr/webpack-iconfont-plugin"
     },
     "keywords": [
         "icons",
-        "webfont",
+        "font",
+        "iconfont",
         "svg",
         "scss",
-        "webpack"
+        "webpack",
+        "plugin"
     ],
     "bugs": {
-        "url": "https://github.com/artofrawr/webpack-webfont-plugin/issues"
+        "url": "https://github.com/artofrawr/webpack-iconfont-plugin/issues"
     },
     "babel": {
         "presets": [
