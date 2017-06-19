@@ -31,7 +31,6 @@ import IconfontPlugin from 'webpack-iconfont-plugin';
 import path from 'path';
 
 export default {
-    ...
     module: {
         loaders: [
             ...
@@ -39,10 +38,10 @@ export default {
     },
     plugins: [
         new IconfontPlugin({
-            files: path.resolve(__dirname, '../svg-icons/**/*.svg'),
+            files: path.resolve(__dirname, '../assets/svg-icons/**/*.svg'),
             dest: {
                 fonts: path.resolve(__dirname, '../assets/fonts'),
-                scss: path.resolve(__dirname, '../styles/_webfont.scss'),
+                scss: path.resolve(__dirname, '../styles/_iconfont.scss'),
             }
         })
     ],
