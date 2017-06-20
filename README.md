@@ -38,11 +38,9 @@ export default {
     },
     plugins: [
         new IconfontPlugin({
-            files: path.resolve(__dirname, '../assets/svg-icons/**/*.svg'),
-            dest: {
-                fonts: path.resolve(__dirname, '../assets/fonts'),
-                scss: path.resolve(__dirname, '../styles/_iconfont.scss'),
-            }
+            svgs: path.resolve(__dirname, '../assets/svg-icons/**/*.svg'),
+            fonts: path.resolve(__dirname, '../assets/fonts'),
+            styles: path.resolve(__dirname, '../styles/_iconfont.scss')
         })
     ],
     ...
