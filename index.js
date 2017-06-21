@@ -8,11 +8,11 @@ export default class IconfontPlugin {
   constructor(options = {}) {
     const required = ['svgs', 'fonts', 'styles'];
 
-    required.forEach(function(r) {
+    for (let r of required) {
       if (!options[r]) {
         throw new Error(`Require '${r}' option`);
       }
-    })
+    }
 
     this.options = Object.assign({}, options);
     this.fileDependencies = [];
