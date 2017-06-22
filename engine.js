@@ -224,7 +224,6 @@ export default function(initialOptions) {
       return globby(
         `${buildInTemplateDirectory}/**/*`
       ).then(buildInTemplates => {
-          console.log(buildInTemplates);
           const supportedExtensions = buildInTemplates.map(
             buildInTemplate =>
               path.extname(

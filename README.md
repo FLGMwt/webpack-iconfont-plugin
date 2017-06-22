@@ -1,6 +1,6 @@
 # webpack-iconfont-plugin
 
-SVG to webfont conversion plugin for webpack.
+SVG to icon font conversion plugin for webpack.
 
 ## Features:
 
@@ -14,13 +14,13 @@ SVG to webfont conversion plugin for webpack.
 `SCSS Styles:`
 
 ```scss
-@import 'webfont.scss';
+@import 'iconfont.scss';
 
-a.avatar {
-    &::before {
-        @extend %webfont;
-        content: $webfont-avatar;
-    }
+a.arrow {
+  &::before {
+    @extend %iconfont;
+    content: $iconfont-arrow;
+  }
 }
 ```
 
@@ -46,3 +46,37 @@ export default {
     ...
 };
 ```
+
+## Options
+
+#### `svgs` (required) 
+Type: `String`
+File path(s) or glob(s) to svg icons.
+
+#### `fonts` (required) 
+Type: `String`
+Destination for generated font files (directory).
+
+#### `styles` (required) 
+Type: `String`
+Destination for generated scss file (file path).
+
+#### `cssFontPath`
+Type: `String` Default value: `/static/fonts/`
+Path that the generated fonts should be referenced with in the CSS styles.
+
+#### `template`
+Type: `String` Default value: `scss`
+Type of built in style templates ('scss', 'mixins') or path to custom template.
+
+#### `fontName`
+Type: `String` Default value: `iconfont`
+This dtermines both the font family name (e.g. `font-family: 'iconfont'`, as well as the prefix for scss variables, mixins and classnames (e.g. `.iconfont-arrow`).
+
+#### `fontHeight`
+Type: `Number` Default value: `MAX(icons.height)`
+The outputted font height (defaults to the height of the highest input icon).
+
+#### `normalize`
+Type: `Boolean` Default value: `false`
+Normalize icons by scaling them all to the height of the highest icon.
