@@ -133,9 +133,7 @@ export default function(initialOptions) {
     {
       ascent: undefined,
       centerHorizontally: false,
-      cssTemplateClassName: null,
-      cssTemplateFontName: null,
-      cssTemplateFontPath: './',
+      cssFontPath: '/static/fonts/',
       descent: 0,
       fixedWidth: false,
       fontHeight: null,
@@ -266,13 +264,8 @@ export default function(initialOptions) {
               },
               options,
               {
-                  className: options.cssTemplateClassName
-                      ? options.cssTemplateClassName
-                      : options.fontName,
-                  fontName: options.cssTemplateFontName
-                      ? options.cssTemplateFontName
-                      : options.fontName,
-                  fontPath: options.cssTemplateFontPath
+                  fontName: options.fontName,
+                  fontPath: options.cssFontPath
               }
           );
 

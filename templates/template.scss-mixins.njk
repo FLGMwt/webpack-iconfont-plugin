@@ -1,5 +1,5 @@
-{% for glyph in glyphs %}
-${{ fontName }}-{{ glyph.name }}: "\{{ glyph.unicode[0].charCodeAt(0).toString(16) }}";
+{% for glyph in glyphs
+%}${{ fontName }}-{{ glyph.name }}: "\{{ glyph.unicode[0].charCodeAt(0).toString(16) }}";
 {% endfor %}
 
 @font-face {
@@ -41,18 +41,9 @@ ${{ fontName }}-{{ glyph.name }}: "\{{ glyph.unicode[0].charCodeAt(0).toString(1
 
 %{{ fontName }} {
     display: inline-block;
+    transform: translate(0, 0);
     text-rendering: auto;
-    font-family: {{ fontName }};
+    font: {{ fontName }};
     font-size: inherit;
     -webkit-font-smoothing: antialiased;
 }
-
-.{{ fontName }} {
-    @extend %{{ fontName }};
-}
-
-{% for glyph in glyphs %}
-.{{ fontName }}-{{ glyph.name }}::before {
-    content: "\{{ glyph.unicode[0].charCodeAt(0).toString(16) }}";
-}
-{% endfor %}

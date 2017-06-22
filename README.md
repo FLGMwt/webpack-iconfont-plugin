@@ -76,7 +76,7 @@ Path that the generated fonts should be referenced with in the CSS styles.
 #### `template`
 Type: `String` Default value: `scss`
 
-Type of built in style templates ('scss', 'mixins') or path to custom template.
+Type of built in style templates ('scss', 'scss-mixins') or path to custom template.
 
 
 #### `fontName`

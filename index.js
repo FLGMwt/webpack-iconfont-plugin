@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import globParent from 'glob-parent';
 import path from 'path';
 import iconfont from './generator'
+import hasha from 'hasha';
 
 export default class IconfontPlugin {
   constructor(options = {}) {
@@ -16,6 +17,7 @@ export default class IconfontPlugin {
 
     this.options = Object.assign({}, options);
     this.fileDependencies = [];
+    this.hashes = {};
 
     this.compile = this.compile.bind(this);
     this.watch = this.watch.bind(this);
@@ -35,23 +37,7 @@ export default class IconfontPlugin {
           let destStyles = null;
 
           if (result.styles) {
-              if (this.options.styles) {
-                  destStyles = path.resolve(this.options.styles);
-              }
-
-              if (result.usedBuildInStylesTemplate) {
-                  destStyles = path.join(
-                      destStyles,
-                      `${result.config.fontName}.${result.config.template}`
-                  );
-              } else {
-                  destStyles = path.join(
-                      destStyles,
-                      path
-                          .basename(result.config.template)
-                          .replace('.njk', '')
-                  );
-              }
+              destStyles = path.resolve(this.options.styles);
           }
 
           return Promise.all(
@@ -64,6 +50,7 @@ export default class IconfontPlugin {
                   }
 
                   const content = result[type];
+                  const hash = hasha(content);
                   let destFilename = null;
 
                   if (type !== 'styles') {
@@ -74,15 +61,18 @@ export default class IconfontPlugin {
                       destFilename = path.resolve(destStyles);
                   }
 
-                  return new Promise((resolve, reject) => {
+                  if (this.hashes[destFilename] !== hash) {
+                    this.hashes[destFilename] = hash;
+                    return new Promise((resolve, reject) => {
                       fs.outputFile(destFilename, content, error => {
                           if (error) {
                               return reject(new Error(error));
                           }
-
                           return resolve();
                       });
-                  });
+                    });
+                  }
+
               })
           );
       }),
