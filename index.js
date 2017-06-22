@@ -2,7 +2,7 @@ import nodify from 'nodeify';
 import fs from 'fs-extra';
 import globParent from 'glob-parent';
 import path from 'path';
-import iconfont from './engine'
+import iconfont from './generator'
 
 export default class IconfontPlugin {
   constructor(options = {}) {
