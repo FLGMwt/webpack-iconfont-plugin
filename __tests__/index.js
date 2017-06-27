@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import del from 'del';
 import IconfontPlugin from '../';
@@ -7,7 +8,7 @@ import webpack from 'webpack';
 const baseConfig = {
   svgs: path.resolve(__dirname, 'assets/svgs/**/*.svg'),
   fonts: path.resolve(__dirname, 'assets/fonts'),
-  styles: path.resolve(__dirname, 'assets/scss')
+  styles: path.resolve(__dirname, 'assets/scss/_iconfont.scss')
 };
 
 const assets = path.resolve(__dirname, 'assets');
@@ -65,15 +66,28 @@ beforeEach(() =>
 
 describe('Webpack execution', () => {
   it('should execute successfully', () => {
-    const options = Object.assign({}, baseConfig);
+    
+    expect.assertions(2);
 
-    webpackConfigBase.plugins = [new IconfontPlugin(options)];
+    function assertZero(data) {
+      console.log('assetzero');
+      expect(data).toEqual(0);
+    }
+
+    function assertExists(filepath) {
+      console.log('assertExists', filepath);
+      expect(fs.existsSync(filepath)).toBeTruthy();
+    }
+
+    webpackConfigBase.plugins = [new IconfontPlugin(baseConfig)];
 
     webpack(webpackConfigBase, (error, stats) => {
         if (error) {
             throw error;
         }
-        expect(stats.compilation.errors.length).toEqual(0);
+
+        assertZero(stats.compilation.errors.length);
+        assertExists(path.resolve(__dirname, 'assets/fonts/iconfont.eot'));
     });
   });
 });

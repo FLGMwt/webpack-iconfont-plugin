@@ -12,7 +12,6 @@ import svg2ttf from 'svg2ttf';
 import ttf2eot from 'ttf2eot';
 import ttf2woff from 'ttf2woff';
 import ttf2woff2 from 'ttf2woff2';
-import merge from 'merge-deep';
 import nunjucks from 'nunjucks';
 
 function getGlyphsData(files, options) {
@@ -245,7 +244,7 @@ export default function(initialOptions) {
               templateFilePath = path.resolve(templateFilePath);
           }
 
-          const nunjucksOptions = merge(
+          const nunjucksOptions = Object.assign(
               {},
               {
                   // Maybe best solution is return metadata object of glyph.
@@ -276,6 +275,7 @@ export default function(initialOptions) {
 
           return result;
       }).then(result => {
+
             if (options.formats.indexOf('svg') === -1) {
                 delete result.svg;
             }
