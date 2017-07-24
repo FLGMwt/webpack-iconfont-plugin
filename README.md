@@ -1,6 +1,6 @@
 # webpack-iconfont-plugin
 
-SVG to icon font conversion plugin for webpack.
+SVG to iconfont conversion plugin for webpack.
 
 ## Features:
 

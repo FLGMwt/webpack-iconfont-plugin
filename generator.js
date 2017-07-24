@@ -1,129 +1,126 @@
-import {Readable} from 'stream';
-import path from 'path';
-import globby from 'globby';
-import xml2js from 'xml2js';
 import createThrottle from 'async-throttle';
-import svgicons2svgfont from 'svgicons2svgfont';
 import defaultMetadataProvider from 'svgicons2svgfont/src/metadata';
 import fileSorter from 'svgicons2svgfont/src/filesorter';
-import os from 'os';
 import fs from 'fs';
+import globby from 'globby';
+import nunjucks from 'nunjucks';
+import os from 'os';
+import path from 'path';
+import {Readable} from 'stream';
+import svgicons2svgfont from 'svgicons2svgfont';
 import svg2ttf from 'svg2ttf';
 import ttf2eot from 'ttf2eot';
 import ttf2woff from 'ttf2woff';
 import ttf2woff2 from 'ttf2woff2';
-import nunjucks from 'nunjucks';
+import xml2js from 'xml2js';
 
 function getGlyphsData(files, options) {
-    const metadataProvider =
-      options.metadataProvider ||
-      defaultMetadataProvider({
-        prependUnicode: options.prependUnicode,
-        startUnicode: options.startUnicode
-      });
+  const metadataProvider =
+    options.metadataProvider ||
+    defaultMetadataProvider({
+      prependUnicode: options.prependUnicode,
+      startUnicode: options.startUnicode
+    });
 
-    const sortedFiles = files.sort((fileA, fileB) => fileSorter(fileA, fileB));
-    const xmlParser = new xml2js.Parser();
-    const throttle = createThrottle(options.maxConcurrency);
+  const sortedFiles = files.sort((fileA, fileB) => fileSorter(fileA, fileB));
+  const xmlParser = new xml2js.Parser();
+  const throttle = createThrottle(options.maxConcurrency);
 
-    return Promise.all(
-        sortedFiles.map(srcPath =>
-            throttle(
-                () =>
-                    new Promise((resolve, reject) => {
-                        const glyph = fs.createReadStream(srcPath);
-                        let glyphContents = '';
+  return Promise.all(
+    sortedFiles.map(srcPath =>
+      throttle(
+        () =>
+          new Promise((resolve, reject) => {
+            const glyph = fs.createReadStream(srcPath);
+              let glyphContents = '';
 
-                        return glyph
-                            .on('error', glyphError => reject(glyphError))
-                            .on('data', data => {
-                                glyphContents += data.toString();
-                            })
-                            .on('end', () => {
-                                // Maybe bug in xml2js
-                                if (glyphContents.length === 0) {
-                                    return reject(
-                                        new Error(`Empty file ${srcPath}`)
-                                    );
-                                }
+              return glyph
+                .on('error', glyphError => reject(glyphError))
+                .on('data', data => {
+                  glyphContents += data.toString();
+                })
+                .on('end', () => {
+                  if (glyphContents.length === 0) {
+                    return reject(
+                      new Error(`Empty file ${srcPath}`)
+                    );
+                  }
 
-                                return xmlParser.parseString(
-                                    glyphContents,
-                                    error => {
-                                        if (error) {
-                                            return reject(error);
-                                        }
+                  return xmlParser.parseString(
+                    glyphContents,
+                    error => {
+                      if (error) {
+                        return reject(error);
+                      }
 
-                                        const glyphData = {
-                                            contents: glyphContents,
-                                            srcPath
-                                        };
+                      const glyphData = {
+                        contents: glyphContents,
+                        srcPath
+                      };
 
-                                        return resolve(glyphData);
-                                    }
-                                );
-                            });
-                    })
-            ).then(
-                glyphData =>
-                    new Promise((resolve, reject) => {
-                        metadataProvider(
-                            glyphData.srcPath,
-                            (error, metadata) => {
-                                if (error) {
-                                    return reject(error);
-                                }
-
-                                glyphData.metadata = metadata;
-
-                                return resolve(glyphData);
-                            }
-                        );
-                    })
-            )
-        )
-    );
+                      return resolve(glyphData);
+                    }
+                  );
+                });
+            })
+      ).then(
+        glyphData =>
+          new Promise((resolve, reject) => {
+            metadataProvider(
+              glyphData.srcPath,
+              (error, metadata) => {
+                if (error) {
+                  return reject(error);
+                }
+                glyphData.metadata = metadata;
+                return resolve(glyphData);
+              }
+            );
+          })
+      )
+    )
+  );
 }
 
 function svgIcons2svgFontFn(glyphsData, options) {
-    let result = '';
+  let result = '';
 
-    return new Promise((resolve, reject) => {
-        const fontStream = svgicons2svgfont({
-            ascent: options.ascent,
-            centerHorizontally: options.centerHorizontally,
-            descent: options.descent,
-            fixedWidth: options.fixedWidth,
-            fontHeight: options.fontHeight,
-            fontId: options.fontId,
-            fontName: options.fontName,
-            fontStyle: options.fontStyle,
-            fontWeight: options.fontWeight,
-            // eslint-disable-next-line no-console, no-empty-function
-            log: options.vebose ? console.log.bind(console) : () => {},
-            metadata: options.metadata,
-            normalize: options.normalize,
-            round: options.round
-        })
-            .on('finish', () => resolve(result))
-            .on('data', data => {
-                result += data;
-            })
-            .on('error', error => reject(error));
+  return new Promise((resolve, reject) => {
+    const fontStream = svgicons2svgfont({
+      ascent: options.ascent,
+      centerHorizontally: options.centerHorizontally,
+      descent: options.descent,
+      fixedWidth: options.fixedWidth,
+      fontHeight: options.fontHeight,
+      fontId: options.fontId,
+      fontName: options.fontName,
+      fontStyle: options.fontStyle,
+      fontWeight: options.fontWeight,
+      // eslint-disable-next-line no-console, no-empty-function
+      log: options.vebose ? console.log.bind(console) : () => {},
+      metadata: options.metadata,
+      normalize: options.normalize,
+      round: options.round
+    })
+    .on('finish', () => resolve(result))
+    .on('data', data => {
+        result += data;
+    })
+    .on('error', error => reject(error));
 
-        glyphsData.forEach(glyphData => {
-            const glyphStream = new Readable();
+    glyphsData.forEach(glyphData => {
+      const glyphStream = new Readable();
 
-            glyphStream.push(glyphData.contents);
-            glyphStream.push(null);
+      glyphStream.push(glyphData.contents);
+      glyphStream.push(null);
 
-            glyphStream.metadata = glyphData.metadata;
+      glyphStream.metadata = glyphData.metadata;
 
-            fontStream.write(glyphStream);
-        });
-
-        fontStream.end();
+      fontStream.write(glyphStream);
     });
+
+    fontStream.end();
+  });
 }
 
 export default function(initialOptions) {
@@ -221,73 +218,63 @@ export default function(initialOptions) {
       return globby(
         `${buildInTemplateDirectory}/**/*`
       ).then(buildInTemplates => {
-          const supportedExtensions = buildInTemplates.map(
-            buildInTemplate =>
-              path.extname(
-                buildInTemplate.replace('.njk', '')
-              )
-          );
+        const supportedExtensions = buildInTemplates.map(
+          buildInTemplate =>
+            path.extname(
+              buildInTemplate.replace('.njk', '')
+            )
+        );
 
-          let templateFilePath = options.template;
+        let templateFilePath = options.template;
 
-          if (
-              supportedExtensions.indexOf(
-                `.${options.template}`
-              ) !== -1
-          ) {
-              result.usedBuildInStylesTemplate = true;
+        if (
+          supportedExtensions.indexOf(
+            `.${options.template}`
+          ) !== -1
+        ) {
+          result.usedBuildInStylesTemplate = true;
+          nunjucks.configure(path.join(__dirname, '../'));
+          templateFilePath = `${buildInTemplateDirectory}/template.${options.template}.njk`;
+        } else {
+            templateFilePath = path.resolve(templateFilePath);
+        }
 
-              nunjucks.configure(path.join(__dirname, '../'));
-
-              templateFilePath = `${buildInTemplateDirectory}/template.${options.template}.njk`;
-          } else {
-              templateFilePath = path.resolve(templateFilePath);
-          }
-
-          const nunjucksOptions = Object.assign(
-              {},
-              {
-                  // Maybe best solution is return metadata object of glyph.
-                  glyphs: glyphsData.map(glyphData => {
-                      if (
-                          typeof options.glyphTransformFn ===
-                          'function'
-                      ) {
-                          options.glyphTransformFn(
-                              glyphData.metadata
-                          );
-                      }
-
-                      return glyphData.metadata;
-                  })
-              },
-              options,
-              {
-                  fontName: options.fontName,
-                  fontPath: options.cssFontPath
+        const nunjucksOptions = Object.assign(
+          {},
+          {
+            glyphs: glyphsData.map(glyphData => {
+              if (typeof options.glyphTransformFn === 'function') {
+                options.glyphTransformFn(
+                  glyphData.metadata
+                );
               }
-          );
+              return glyphData.metadata;
+            })
+          },
+          options,
+          {
+            fontName: options.fontName,
+            fontPath: options.cssFontPath
+          }
+        );
 
-          result.styles = nunjucks.render(
-              templateFilePath,
-              nunjucksOptions
-          );
+        result.styles = nunjucks.render(
+          templateFilePath,
+          nunjucksOptions
+        );
 
-          return result;
+        return result;
       }).then(result => {
+        if (options.formats.indexOf('svg') === -1) {
+          delete result.svg;
+        }
 
-            if (options.formats.indexOf('svg') === -1) {
-                delete result.svg;
-            }
-
-            if (options.formats.indexOf('ttf') === -1) {
-                delete result.ttf;
-            }
-
-            result.config = options;
-
-            return result;
-        })
+        if (options.formats.indexOf('ttf') === -1) {
+          delete result.ttf;
+        }
+        result.config = options;
+        return result;
+      })
     })
   )
 }
