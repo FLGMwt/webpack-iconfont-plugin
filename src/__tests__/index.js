@@ -64,30 +64,30 @@ beforeEach(() =>
   ])
 );
 
-describe('Webpack execution', () => {
-  it('should execute successfully', () => {
+// describe('Webpack execution', () => {
+//   it('should execute successfully', () => {
     
-    expect.assertions(2);
+//     expect.assertions(2);
 
-    function assertZero(data) {
-      console.log('assetzero');
-      expect(data).toEqual(0);
-    }
+//     function assertZero(data) {
+//       console.log('assetzero');
+//       expect(data).toEqual(0);
+//     }
 
-    function assertExists(filepath) {
-      console.log('assertExists', filepath);
-      expect(fs.existsSync(filepath)).toBeTruthy();
-    }
+//     function assertExists(filepath) {
+//       console.log('assertExists', filepath);
+//       expect(fs.existsSync(filepath)).toBeTruthy();
+//     }
 
-    webpackConfigBase.plugins = [new IconfontPlugin(baseConfig)];
+//     webpackConfigBase.plugins = [new IconfontPlugin(baseConfig)];
 
-    webpack(webpackConfigBase, (error, stats) => {
-        if (error) {
-            throw error;
-        }
+//     webpack(webpackConfigBase, (error, stats) => {
+//         if (error) {
+//             throw error;
+//         }
 
-        assertZero(stats.compilation.errors.length);
-        assertExists(path.resolve(__dirname, 'assets/fonts/iconfont.eot'));
-    });
-  });
-});
+//         assertZero(stats.compilation.errors.length);
+//         assertExists(path.resolve(__dirname, 'assets/fonts/iconfont.eot'));
+//     });
+//   });
+// });
