@@ -9,7 +9,7 @@
     "url": "https://github.com/artofrawr/webpack-iconfont-plugin"
   },
   "scripts": {
-    "build": "babel --ignore __tests__ -s inline -d dist src",
+    "build": "babel --ignore __tests__ --copy-files -s inline -d dist src",
     "prepublish": "npm test && npm run build",
     "test": "jest"
   },
