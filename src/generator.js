@@ -1,3 +1,4 @@
+import cloneDeep from 'clone-deep';
 import createThrottle from 'async-throttle';
 import defaultMetadataProvider from 'svgicons2svgfont/src/metadata';
 import fileSorter from 'svgicons2svgfont/src/filesorter';
@@ -251,18 +252,16 @@ export default function(initialOptions) {
               return glyphData.metadata;
             })
           },
-          options,
+          cloneDeep(options),
           {
             fontName: options.fontName,
             fontPath: options.cssFontPath
           }
         );
-
         result.styles = nunjucks.render(
           templateFilePath,
           nunjucksOptions
         );
-
         return result;
       }).then(result => {
         if (options.formats.indexOf('svg') === -1) {
