@@ -1,12 +1,12 @@
 {
-  "name": "webpack-iconfont-plugin",
+  "name": "webpack-iconfont-plugin-temp-fork",
   "version": "0.0.2",
   "description": "Webpack plugin to create iconfont from svgs",
   "license": "MIT",
-  "author": "Jens Fischer <jens@weareprofound.com>",
+  "author": "Jens Fischer <jens@weareprofound.com>, Fork: Ryan Stelly, until fixes merged",
   "repository": {
     "type": "https",
-    "url": "https://github.com/artofrawr/webpack-iconfont-plugin"
+    "url": "https://github.com/FLGMwt/webpack-iconfont-plugin"
   },
   "scripts": {
     "build": "babel --ignore __tests__ --copy-files -s inline -d dist src",
