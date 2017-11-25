@@ -169,7 +169,7 @@ export default function(initialOptions) {
       foundFiles.forEach(foundFile => {
         if (path.extname(foundFile) !== '.svg') return;
         if (options.mergeDuplicates) {
-          var index = foundFiles.findIndex(item => path.basename(foundFile) === path.basename(item));
+          var index = filteredFiles.findIndex(item => path.basename(foundFile) === path.basename(item));
           if (index !== -1) {
             filteredFiles[index] = foundFile;
             return;
@@ -184,8 +184,8 @@ export default function(initialOptions) {
         );
       }
 
-      options.foundFiles = foundFiles;
-      return getGlyphsData(foundFiles, options);
+      options.foundFiles = filteredFiles;
+      return getGlyphsData(filteredFiles, options);
     }).then(returnedGlyphsData => {
       glyphsData = returnedGlyphsData;
       return svgIcons2svgFontFn(returnedGlyphsData, options);
