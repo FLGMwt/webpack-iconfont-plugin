@@ -9,7 +9,7 @@
     "url": "https://github.com/bstoked-sports/webpack-iconfont-plugin"
   },
   "scripts": {
-    "build": "babel --ignore __tests__ -s inline -d dist src",
+    "build": "babel --ignore __tests__ --copy-files -s inline -d dist src",
     "prepublish": "npm test && npm run build",
     "postinstall": "npm run build",
     "test": "jest"
@@ -49,6 +49,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "async-throttle": "^1.1.0",
+    "clone-deep": "^1.0.0",
     "fs-extra": "^3.0.0",
     "glob-parent": "^3.1.0",
     "globby": "^6.1.0",
