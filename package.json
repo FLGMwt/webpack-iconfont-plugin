@@ -56,7 +56,7 @@
     "hasha": "^3.0.0",
     "nodeify": "^1.0.0",
     "nunjucks": "^3.0.1",
-    "postinstall-build": "^5.0.1",
+    "postinstall-build-yarn": "0.0.2",
     "svg2ttf": "^4.0.3",
     "svgicons2svgfont": "^5.0.1",
     "ttf2eot": "^2.0.0",
