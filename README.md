@@ -95,3 +95,9 @@ The outputted font height (defaults to the height of the highest input icon).
 Type: `Boolean` Default value: `false`
 
 Normalize icons by scaling them all to the height of the highest icon.
+
+
+#### `mergeDuplicates`
+Type: `Boolean` Default value: `false`
+
+Merges files according to their base name. Keep only last file with same filename.
