@@ -148,6 +148,7 @@ export default function(initialOptions) {
       },
       glyphTransformFn: null,
       maxConcurrency: os.cpus().length,
+      mergeDuplicates: false,
       metadata: null,
       metadataProvider: null,
       normalize: false,
@@ -165,9 +166,18 @@ export default function(initialOptions) {
   return (
     globby([].concat(svgs))
     .then(foundFiles => {
-      const filteredFiles = foundFiles.filter(
-        foundFile => path.extname(foundFile) === '.svg'
-      );
+      const filteredFiles = [];
+      foundFiles.forEach(foundFile => {
+        if (path.extname(foundFile) !== '.svg') return;
+        if (options.mergeDuplicates) {
+          var index = foundFiles.findIndex(item => path.basename(foundFile) === path.basename(item));
+          if (index !== -1) {
+            filteredFiles[index] = file;
+            return;
+          }
+        }
+        filteredFiles.push(file);
+      })
 
       if (filteredFiles.length === 0) {
         throw new Error(
