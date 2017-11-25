@@ -171,11 +171,11 @@ export default function(initialOptions) {
         if (options.mergeDuplicates) {
           var index = foundFiles.findIndex(item => path.basename(foundFile) === path.basename(item));
           if (index !== -1) {
-            filteredFiles[index] = file;
+            filteredFiles[index] = foundFile;
             return;
           }
         }
-        filteredFiles.push(file);
+        filteredFiles.push(foundFile);
       })
 
       if (filteredFiles.length === 0) {
