@@ -1,6 +1,6 @@
 {
   "name": "webpack-iconfont-plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Webpack plugin to create iconfont from svgs",
   "license": "MIT",
   "author": "Guilherme Duarte <gjsduarte@gmail.com>",
