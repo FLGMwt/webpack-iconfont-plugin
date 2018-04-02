@@ -85,8 +85,14 @@ export default class IconfontPlugin {
 
     globPatterns.forEach(globPattern => {
       const context = globParent(globPattern);
-      if (compilation.contextDependencies.indexOf(context) === -1) {
-        compilation.contextDependencies.push(context);
+      if (Array.isArray(compilation.contextDependencies)) {
+        if (compilation.contextDependencies.indexOf(context) === -1) {
+          compilation.contextDependencies.push(context);
+        }
+      } else {
+        if (!compilation.contextDependencies.has(context)) {
+          compilation.contextDependencies.add(context);
+        }
       }
     });
 
