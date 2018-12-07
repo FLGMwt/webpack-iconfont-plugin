@@ -1,11 +1,11 @@
-import nodify from 'nodeify';
-import fs from 'fs-extra';
-import globParent from 'glob-parent';
-import path from 'path';
-import iconfont from './generator'
-import hasha from 'hasha';
+const nodify = require('nodeify');
+const fs = require('fs-extra');
+const globParent = require('glob-parent');
+const path = require('path');
+const iconfont = require('./generator')
+const hasha = require('hasha');
 
-export default class IconfontPlugin {
+module.exports = class IconfontPlugin {
   constructor(options = {}) {
     const required = ['svgs', 'fonts', 'styles'];
 
@@ -85,14 +85,8 @@ export default class IconfontPlugin {
 
     globPatterns.forEach(globPattern => {
       const context = globParent(globPattern);
-      if (Array.isArray(compilation.contextDependencies)) {
-        if (compilation.contextDependencies.indexOf(context) === -1) {
-          compilation.contextDependencies.push(context);
-        }
-      } else {
-        if (!compilation.contextDependencies.has(context)) {
-          compilation.contextDependencies.add(context);
-        }
+      if (compilation.contextDependencies.indexOf(context) === -1) {
+        compilation.contextDependencies.push(context);
       }
     });
 
